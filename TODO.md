@@ -5,14 +5,16 @@
   example, if the maximum back-off order is set to 2, and the lookup in the 
   2nd order MC does not yield a valid result, the word is terminated with a 
   `\n` immediately. This is to prevent too random letters form appearing.
-- [ ] Use the `csv` library to load CSV data.
+- [x] Use the `csv` library to load CSV data.
 - [ ] Test whether using "starting characters" leads to better results. 
 - [ ] Find a way to deal with non-letter chars, which can cause a bit of a 
   problem right now. For example, right now the common context `st.` as in 
   "St. Louis" can in principle be mistakenly used in the middle of a name:
   `August. Louis` would be a possible 3rd order result, which just doesn't 
   make sense linguistically. Using starting chars only prevents this for order
-  four and above. Idea: limit prior to alphabetic characters only?
+  four and above. 
+- [ ] Idea: limit prior to alphabetic characters only? This could prevent 
+  random non-alphabetic characters from ruining the words.
 - [ ] Change the meaning of `prior`: Large datasets should react the same 
   way to a prior of 0.02 as small datasets. Currently, however, a prior of 0.02
   means that there is a larger chance for random characters in small training
