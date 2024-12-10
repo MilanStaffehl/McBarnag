@@ -13,3 +13,10 @@
   `August. Louis` would be a possible 3rd order result, which just doesn't 
   make sense linguistically. Using starting chars only prevents this for order
   four and above. Idea: limit prior to alphabetic characters only?
+- [ ] Change the meaning of `prior`: Large datasets should react the same 
+  way to a prior of 0.02 as small datasets. Currently, however, a prior of 0.02
+  means that there is a larger chance for random characters in small training
+  datasets, but miniscule chances for large datasets. The prior should be set
+  such that it is taken as a fraction of the total number of words in the 
+  training data (i.e. for N words in the training data, a prior of 0.02 means
+  that 0.02 * N is the prior for every character).
