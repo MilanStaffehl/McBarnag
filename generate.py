@@ -18,6 +18,9 @@ def main(args: argparse.Namespace) -> None:
     if args.dataset == "cities":
         loader = loaders.WorldCitiesLoader(args.language)
         filepath = "./resources/worldcities.csv"
+    elif args.dataset == "greek-mythology":
+        loader = loaders.GreekMythologyLoader()
+        filepath = "./resources/greek_mythology.csv"
     else:
         raise KeyError(f"Unknown dataset: {args.dataset}")
 
@@ -42,7 +45,7 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "The dataset to choose for the training of the Markov model."
         ),
-        choices=["cities", "greek-gods"],
+        choices=["cities", "greek-mythology"],
     )
     parser.add_argument(
         "-o",
