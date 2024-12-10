@@ -63,9 +63,6 @@ class WorldCitiesLoader(LoaderABC):
             country = line.replace('"', "").split(",")[country_index]
             if self.countries is None or country in self.countries:
                 cities.append(city)
-
-        ct = [c for c in cities if "." in c]
-        print(ct)
         return cities
 
 
@@ -88,5 +85,4 @@ class GreekMythologyLoader(LoaderABC):
             field_index = header.index("name-english")
             for row in reader:
                 names.append(row[field_index])
-        print(names)
         return names
