@@ -15,6 +15,16 @@ class MarkovChain:
     """
 
     def __init__(self, data: list[str], order: int, prior: float) -> None:
+        """
+        :param data: A list of words to use as training data.
+        :param order: The order of the Markov-chain, i.e. the length of
+            the context (which is the number of characters considered)
+            used to determine the next char.
+        :param prior: The prior probability for characters. This
+            probability will be applied to all supported characters
+            before the training, giving chances for characters to
+            appear that are not learned in training.
+        """
         self.order = order
         self.support = list(set("".join(data)))
         self.support.sort()
@@ -92,10 +102,31 @@ class MarkovModel:
     A model, trained to create random names from a set of training data.
     """
 
-    def __init__(self, data: list[str], order: int, prior: float) -> None:
+    def __init__(
+        self,
+        data: list[str],
+        order: int,
+        prior: float,
+        max_backoff: int = 1
+    ) -> None:
+        """
+        :param data: List of words to train the model with.
+        :param order: The order of the model, i.e. the number of preceding
+            characters to take into account as context for determination
+            of the next char.
+        :param prior: The prior probability for any character to be
+            selected. Will be applied to all supported chars before
+            training the model.
+        :param max_backoff: The maximum back-off order, i.e. the lowest
+            order for which a model will be trained and used in look-up.
+        """
         self.order = order
+        self.max_backoff = max_backoff
         self.valid_startpoints = self._valid_startpoints(data)
-        self.model = {i: MarkovChain(data, i, prior) for i in range(1, self.order + 1)}
+        self.model = {
+            i: MarkovChain(data, i, prior)
+            for i in range(self.max_backoff, self.order + 1)
+        }
 
     def generate(self, max_length: int) -> str:
         """
@@ -120,14 +151,15 @@ class MarkovModel:
         If the context does not exist in the given MC, a Katz-Back-Off
         is automatically performed, sampling the next lower order MC
         until a next char can be determined, or the end-of-word char
-        is returned.
+        is returned. The latter can happen when the lowest allowed
+        back-off order is surpassed.
 
         :param context: The context for which to find the next char.
         :param order: The order of the Markov Chain to sample from.
         :return: The next char, determined probabilistically, using a
             back-off scheme if the current order yields no result.
         """
-        if order == 0:
+        if order <= self.max_backoff - 1:
             return "\n"
         next_char = self.model[order].sample(context)
         if next_char is None:

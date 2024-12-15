@@ -1,6 +1,6 @@
 # TODOs
 
-- [ ] **Maximum back-off**: Introduce a "maximum back-off", i.e. a minimum order 
+- [x] **Maximum back-off**: Introduce a "maximum back-off", i.e. a minimum order 
   (other than the current hard-coded default of 1) down to which a back-off is 
   performed. For example, if the maximum back-off order is set to 2, and the 
   lookup in the 2nd order MC does not yield a valid result, the word is 
@@ -16,7 +16,9 @@
   training data (i.e. for N words in the training data, a prior of 0.02 means
   that 0.02 * N is the prior for every character).
 - [ ] **Start chars**: Test whether using "starting characters" leads to better 
-  results. 
+  results. Note: I do not think it makes any difference - in effect, it just 
+  does what the current "list of possible starts" already does, but with added
+  chars to keep track of.
 - [ ] Find a way to deal with non-letter chars, which can cause a bit of a 
   problem right now. For example, right now the common context `st.` as in 
   "St. Louis" can in principle be mistakenly used in the middle of a name:

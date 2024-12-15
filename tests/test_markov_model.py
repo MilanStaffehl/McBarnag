@@ -275,6 +275,7 @@ def test_markov_model_class_init() -> None:
     """Test that the model is instantiated correctly from simple data"""
     mm = markov_model.MarkovModel(["hamburg"], order=3, prior=0)
     assert mm.order == 3
+    assert mm.max_backoff == 1
     assert mm.valid_startpoints == ["ham"]
     # check all chains are present
     assert 1 in mm.model.keys()
@@ -289,10 +290,21 @@ def test_markov_model_class_order() -> None:
     """Test that the order is correctly applied to the model"""
     mm = markov_model.MarkovModel(["hamburg"], order=5, prior=0)
     assert mm.order == 5
+    assert mm.max_backoff == 1
     for i in range(5):
         order = i + 1
         assert order in mm.model.keys()
         assert mm.model[order].order == order
+
+
+def test_markov_model_class_max_backoff() -> None:
+    """Test that the maximum backoff is applied to the model"""
+    mm = markov_model.MarkovModel(["hamburg"], order=3, prior=0, max_backoff=2)
+    assert mm.order == 3
+    assert mm.max_backoff == 2
+    assert 1 not in mm.model.keys()
+    assert 2 in mm.model.keys()
+    assert 3 in mm.model.keys()
 
 
 def test_markov_model_class_prior() -> None:
@@ -378,3 +390,19 @@ def test_markov_model_class_sample_method() -> None:
     assert mm.sample("xyzg", 4) == "\n"
     # Test back-off fall-through with unsupported combination
     assert mm.sample("xyzq", 4) == "\n"
+
+
+def test_markov_model_class_sample_method_with_max_backoff() -> None:
+    """Test that the maximum back-off limits sampling."""
+    words = ["hamburg", "berlin", "heilbronn", "heidelberg"]
+    mm = markov_model.MarkovModel(words, order=4, prior=0, max_backoff=3)
+    # Test directly that too low order returns newline char
+    assert mm.sample("h", 1) == "\n"
+    assert mm.sample("he", 2) == "\n"
+    # Test that unsupported solutions of higher order fall through
+    assert mm.sample("xyh", 3) == "\n"
+    assert mm.sample("xyhe", 4) == "\n"
+    # Test that valid sampling works as intended
+    assert mm.sample("ambu", 4) == "r"
+    assert mm.sample("xmbu", 4) == "r"  # fall through to 3rd order
+    assert mm.sample("ham", 3) == "b"

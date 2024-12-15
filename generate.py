@@ -25,7 +25,9 @@ def main(args: argparse.Namespace) -> None:
         raise KeyError(f"Unknown dataset: {args.dataset}")
 
     training_data = loader.load(filepath)
-    model = markov_model.MarkovModel(training_data, args.order, args.prior)
+    model = markov_model.MarkovModel(
+        training_data, args.order, args.prior, args.max_backoff
+    )
 
     for i in range(args.number):
         name = model.generate(args.max_length)
@@ -69,9 +71,19 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
     )
     parser.add_argument(
+        "-b",
+        "--max-backoff",
+        help=(
+            "The maximum MC order to fall back to when a higher order does "
+            "not contain a set of characters."
+        ),
+        default=1,
+        type=int,
+    )
+    parser.add_argument(
         "-n",
         "--number",
-        help="How manz names to generate and display.",
+        help="How many names to generate and display.",
         default=1,
         type=int,
     )
