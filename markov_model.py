@@ -4,6 +4,7 @@ Generator for random names, employing Markov chains.
 
 import random
 import copy
+from typing import ClassVar
 
 
 type MarkovChainType = dict[str, dict[str, float]]
@@ -25,13 +26,14 @@ class MarkovChain:
             before the training, giving chances for characters to
             appear that are not learned in training.
         """
+        normalized_data = [word.lower() for word in data]
         self.order = order
-        self.support = list(set("".join(data)))
+        self.support = list(set("".join(normalized_data)))
         self.support.sort()
         self.prior = {x: prior for x in self.support}
         self.prior.update({"\n": 0})
         self.chain: MarkovChainType = dict()
-        for word in data:
+        for word in normalized_data:
             self.learn(word)
 
     def __str__(self) -> str:

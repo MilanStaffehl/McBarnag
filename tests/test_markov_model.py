@@ -206,6 +206,19 @@ def test_markov_chain_class_multiple_words(
     assert mc.chain == expected_mc
 
 
+def test_markov_chain_class_capitalization(
+    markov_chain_3rd_order: TestDataType
+) -> None:
+    """Test that capitalization is removed from input data"""
+    _, support, prior, expected_mc = markov_chain_3rd_order
+    words = ["Hamburg", "bErLiN", "HeilBronn", "HEIDELBERG"]
+    mc = markov_model.MarkovChain(words, order=3, prior=0)
+    assert mc.order == 3
+    assert mc.support == support
+    assert mc.prior == prior
+    assert mc.chain == expected_mc
+
+
 def test_markov_chain_class_prior(
     markov_chain_3rd_order: TestDataType
 ) -> None:
