@@ -4,7 +4,6 @@ Generator for random names, employing Markov chains.
 
 import random
 import copy
-from typing import ClassVar
 
 
 type MarkovChainType = dict[str, dict[str, float]]
