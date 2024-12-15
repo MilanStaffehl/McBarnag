@@ -8,6 +8,10 @@
 
 Another one of these random name generators that employs Markov-chains to create random names and curious accidents from training data. This one has nothing extraordinary going on, and you can probably find better and more versatile implementations out there. But this one is mine.
 
+> [!NOTE]
+>
+> This is a very rudimentary project, and hence a very rudimentary README. This project is not meant for professional use, and can at best serve educational purposes. Feel free to browse the code, but don't expect too much in terms of complexity.
+
 ## Usage
 
 ### Installation
