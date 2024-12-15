@@ -38,7 +38,7 @@ In the cloned repository, you can run the `generate.py` script to get some rando
 python generate.py -h
 ```
 
-To view the help text for the script. It tells you how to use the current version of the script best.
+to view the help text for the script. It tells you how to use the current version of the script best.
 
 ## Roadmap
 
